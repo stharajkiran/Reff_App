@@ -1,0 +1,683 @@
+@import "tailwindcss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(180deg, #f0f4f8 0%, #dde7f0 100%);
+  color: #1f2933;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* ── Header ─────────────────────────────────────────── */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(90deg, #1a56bd, #1e3a8a);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.app-header-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.app-header-nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.nav-link:hover {
+  color: white;
+}
+
+.nav-link.active {
+  color: white;
+  border-bottom-color: white;
+}
+/* ── Fixtures Page ──────────────────────────────────────────── */
+.fixtures-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.fixtures-page h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.fixtures-subtitle {
+  color: #486581;
+  margin-bottom: 1.25rem;
+}
+
+.fixtures-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  margin-bottom: 1rem;
+}
+
+.fixtures-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.fixtures-textarea {
+  width: 100%;
+  border: 1px solid #bcccdc;
+  border-radius: 10px;
+  padding: 0.75rem;
+  resize: vertical;
+  font: inherit;
+}
+
+.fixtures-button {
+  margin-top: 0.75rem;
+  border: none;
+  background: #0f766e;
+  color: #ffffff;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.fixtures-button:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+.fixtures-button.continue {
+  width: 100%;
+}
+
+.fixtures-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.fixtures-bulk-editor {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #d9e2ec;
+  border-radius: 12px;
+  background: #f8fbff;
+}
+
+.fixtures-bulk-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.fixtures-select {
+  flex: 1;
+  min-height: 44px;
+  border: 1px solid #bcccdc;
+  border-radius: 10px;
+  padding: 0.7rem 0.75rem;
+  background: #ffffff;
+  color: #1f2933;
+  font: inherit;
+}
+
+.fixtures-counter {
+  font-weight: 700;
+  color: #334e68;
+}
+
+.fixtures-list {
+  list-style: none;
+  display: grid;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.fixture-item {
+  width: 100%;
+  border: 1px solid #d9e2ec;
+  background: #f8fbff;
+  border-radius: 10px;
+  padding: 0.75rem;
+  text-align: left;
+  display: grid;
+  gap: 0.2rem;
+  cursor: pointer;
+}
+
+.fixture-item.selected {
+  border-color: #0f766e;
+  background: #ddf7f3;
+}
+
+.fixture-time {
+  font-weight: 700;
+}
+
+.fixture-teams {
+  font-size: 0.98rem;
+}
+
+.fixture-location {
+  color: #627d98;
+  font-size: 0.9rem;
+}
+
+.fixture-location.needs-review {
+  color: #9a6700;
+  font-weight: 700;
+}
+
+.fixture-review-tag {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: #fff3cd;
+  color: #8a5a00;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.fixtures-button.bulk-apply {
+  margin-top: 0;
+  white-space: nowrap;
+}
+
+.fixtures-muted {
+  color: #627d98;
+  font-size: 0.92rem;
+}
+
+@media (max-width: 640px) {
+  .fixtures-page h1 {
+    font-size: 1.45rem;
+  }
+
+  .fixtures-card {
+    padding: 0.85rem;
+  }
+
+  .fixtures-bulk-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* ── Shift Page ──────────────────────────────────────────── */
+
+.shift-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.shift-page h1 {
+  font-size: 1.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.shift-list {
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.shift-game-button {
+  width: 100%;
+  border: 1px solid #d9e2ec;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1rem;
+  text-align: left;
+  cursor: pointer;
+  display: grid;
+  gap: 0.35rem;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.shift-game-button:hover {
+  border-color: #0f766e;
+  background: #f0fdf9;
+}
+
+.shift-game-meta {
+  font-size: 0.85rem;
+  color: #627d98;
+  font-weight: 600;
+}
+
+.shift-game-teams {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1f2933;
+}
+
+.shift-game-score {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f766e;
+  letter-spacing: 0.05em;
+}
+
+.shift-game-status {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: #e2e8f0;
+  color: #334e68;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.shift-game-status.status-first-half,
+.shift-game-status.status-second-half {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.shift-game-status.status-half-time {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.shift-game-status.status-final {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+/* ── Game Page ──────────────────────────────────────────── */
+
+/* Container for the whole score area */
+.score-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  margin: 20px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Individual team columns */
+.team-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.team-control h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+  text-align: center;
+}
+
+/* The row containing -, score, and + */
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Styling the buttons */
+.counter button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    transform 0.1s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.counter button:hover {
+  background-color: #0056b3;
+}
+
+.counter button:active {
+  transform: scale(0.95);
+}
+
+/* The big score number */
+.score-display {
+  font-size: 2.5rem;
+  font-weight: 800;
+  min-width: 50px;
+  text-align: center;
+  font-variant-numeric: tabular-nums; /* Prevents shifting when numbers change */
+}
+
+/* The "VS" in the middle */
+.divider {
+  font-weight: bold;
+  color: #999;
+  font-size: 1rem;
+  padding: 0 1rem;
+}
+
+.game-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: "Inter", system-ui, sans-serif;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 1rem;
+}
+
+.meta-info {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.dot {
+  color: #ccc;
+}
+
+.meta-info p {
+  margin: 0;
+}
+
+.score-dashboard {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 15px;
+  margin-top: auto; /* pushes score cards to the bottom of the page */
+  padding-bottom: 2rem;
+}
+
+.score-card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+/* The giant clickable team button */
+.score-card {
+  width: 100%;
+  padding: 2rem 1rem;
+  border: none;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.score-card:active {
+  transform: scale(0.96);
+  background: #f0f0f0;
+}
+
+.score-card.home {
+  border-bottom: 5px solid #007bff;
+}
+.score-card.away {
+  border-bottom: 5px solid #dc3545;
+}
+
+.team-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.score-value {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #222;
+}
+
+/* Subtle undo button for mistakes */
+.undo-btn {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 0.75rem;
+  margin-top: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.undo-btn:hover {
+  color: #666;
+}
+
+.vs-label {
+  align-self: center;
+  font-weight: bold;
+  color: #ccc;
+  padding-bottom: 40px; /* Aligns with the card centers */
+}
+
+/* Start first half button and status badge */
+
+.status-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.start-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  transition: all 0.2s ease;
+}
+
+.start-btn:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.start-btn:active {
+  transform: translateY(0);
+}
+
+/* Badge for when the game is live */
+.status-badge {
+  background: #eee;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.live-icon {
+  color: #d9534f;
+  animation: blink 1.5s infinite;
+}
+
+.match-timer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 1px solid #ccc;
+}
+
+.clock-icon {
+  font-size: 0.9rem;
+}
+
+.time-digits {
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums; /* prevents layout shift as digits change */
+  letter-spacing: 0.5px;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* The container for both elements */
+.status-control.final-view {
+  display: flex;
+  flex-direction: column; /* Stack them on mobile */
+  align-items: center; /* Center them horizontally */
+  gap: 40px; /* Consistent space between them */
+  margin-top: 20px;
+}
+
+/* On wider screens, put them side-by-side */
+@media (min-width: 480px) {
+  .status-control.final-view {
+    flex-direction: row; /* Side by side */
+    justify-content: center;
+    align-items: center; /* This fixes the "different heights" issue */
+  }
+}
+
+.check-icon {
+  margin-right: 6px;
+}
+
+.final-badge {
+  display: flex;
+  align-items: center;
+  background-color: #343a40;
+  color: white;
+  padding: 8px 16px; /* Match the vertical padding of the button */
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem; /* Match button font size */
+  height: 40px; /* Fixed height for both makes them identical */
+  box-sizing: border-box;
+  margin-right: 15px;
+}
+
+.secondary-btn {
+  background: #f9f9fa;
+  border: 1px solid #ddd;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #1708f0;
+  font-size: 0.9rem;
+  height: 40px; /* Fixed height to match the badge */
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.secondary-btn:hover {
+  background-color: #9ab9a3;
+  border-color: #ccc;
+}
+
+
+/* The base class for overtime */
+.timer-overtime {
+  color: #ff4d4d; /* Bright red */
+  font-weight: bold;
+  animation: pulse-red 1.5s infinite;
+}
+
+/* The pulse animation */
+@keyframes pulse-red {
+  0% {
+    opacity: 1;
+    text-shadow: 0 0 0px rgba(255, 77, 77, 0);
+  }
+  50% {
+    opacity: 0.7;
+    /* Soft glow effect */
+    text-shadow: 0 0 8px rgba(255, 77, 77, 0.6);
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 0px rgba(255, 77, 77, 0);
+  }
+}
+

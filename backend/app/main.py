@@ -1,0 +1,34 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from app.routers import fixtures
+
+app = FastAPI()
+
+# --- 1. CORS Configuration ---
+# This allows your React (Vite) dev server to make requests to FastAPI
+origins = [
+    "http://localhost:5173",  # Default Vite port
+    "http://127.0.0.1:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows GET, POST, etc.
+    allow_headers=["*"],  # Allows all headers
+)
+
+# --- 2. Include Routers ---
+# We prefix the routes so your frontend calls /api/fixtures
+app.include_router(fixtures.router, prefix="/api")
+
+@app.get("/")
+def read_root():
+    return {"status": "online", "message": "Match Tracker API is running"}
+
+if __name__ == "__main__":
+    import uvicorn
+    # Run the app locally on port 8000
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

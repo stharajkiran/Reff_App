@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run FastAPI",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["app.main:app", "--reload"],
+      "cwd": "${workspaceFolder}/backend"
+    },
+    {
+      "name": "Debug current file as module",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "app.${fileBasenameNoExtension}",
+      "cwd": "${workspaceFolder}/backend"
+    }
+  ]
+}
