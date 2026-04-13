@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { ParsedFixture } from '../types';
 import { SHIFT_KEY } from '../config';
+import { storage } from '../storage';
 
 // 1. Define the shape of our context
 interface ShiftCartContextType {
@@ -17,13 +18,13 @@ const ShiftCartContext = createContext<ShiftCartContextType | undefined>(undefin
 // 2. The Provider component
 export function ShiftCartProvider({ children }: { children: React.ReactNode }) {
     const [cartFixtures, setCartFixtures] = useState<ParsedFixture[]>(() => {
-        const saved = localStorage.getItem(SHIFT_KEY);
+        const saved = storage.get(SHIFT_KEY);
         return saved ? JSON.parse(saved) : [];
     });
 
     // Keep localStorage in sync with our one source of truth
     useEffect(() => {
-        localStorage.setItem(SHIFT_KEY, JSON.stringify(cartFixtures));
+        storage.set(SHIFT_KEY, JSON.stringify(cartFixtures));
     }, [cartFixtures]);
 
     function addToCart(fixture: ParsedFixture) {

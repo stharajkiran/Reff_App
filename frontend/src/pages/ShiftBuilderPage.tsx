@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFixtures } from '../hooks/useFixtures';
-import { useShiftCart } from '../hooks/useShiftCart';
+import { useShiftCart } from '../context/ShiftCartContext'
 // import FixtureCard from '../components/FixtureCard';
 
 const formatDateToFixture = (isoDate: string): string => {

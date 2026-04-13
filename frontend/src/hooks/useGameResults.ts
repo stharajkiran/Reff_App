@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import type { GameResult } from '../types'
 import { HALF_DURATION_MINUTES, BREAK_DURATION_SECONDS } from '../config'
+import { storage } from '../storage'
+
 
 // Storage key — all game results are stored under this single key.
 const STORAGE_KEY = 'gameResults'
@@ -10,7 +12,7 @@ const STORAGE_KEY = 'gameResults'
 // and values are GameResult. Example: { "fixture-1": { homeScore: 2, ... } }
 function loadFromStorage(): Record<string, GameResult> {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
+    const raw = storage.get(STORAGE_KEY)
     return raw ? (JSON.parse(raw) as Record<string, GameResult>) : {}
   } catch {
     // If storage is corrupted, start fresh rather than crashing.
@@ -20,7 +22,7 @@ function loadFromStorage(): Record<string, GameResult> {
 
 // Write the full results map back to localStorage.
 function saveToStorage(results: Record<string, GameResult>): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(results))
+  storage.set(STORAGE_KEY, JSON.stringify(results))
 }
 
 // Creates a fresh GameResult for a fixture that is opening for the first time.

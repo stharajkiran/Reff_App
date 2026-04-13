@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import type { ParsedFixture } from '../types'
 import { STORAGE_KEY } from '../config'
+import { storage } from '../storage'
 
 function loadFromStorage(): ParsedFixture[] {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
+    const raw = storage.get(STORAGE_KEY)
     return raw ? (JSON.parse(raw) as ParsedFixture[]) : []
   } catch {
     return []
@@ -12,7 +13,7 @@ function loadFromStorage(): ParsedFixture[] {
 }
 
 function saveToStorage(fixtures: ParsedFixture[]): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(fixtures))
+  storage.set(STORAGE_KEY, JSON.stringify(fixtures))
 }
 
 // useShiftFixtures manages the current shift's fixture list.

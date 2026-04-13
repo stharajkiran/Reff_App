@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useShiftCart } from "../hooks/useShiftCart";
+import { useShiftCart } from '../context/ShiftCartContext'
 import { useGameResults } from "../hooks/useGameResults";
 import { HALF_DURATION_MINUTES, BREAK_DURATION_SECONDS } from "../config";
 

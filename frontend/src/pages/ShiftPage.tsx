@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { useGameResults } from '../hooks/useGameResults'
-import { useShiftCart } from '../hooks/useShiftCart'
+import { useShiftCart } from '../context/ShiftCartContext'
+import { useShiftHistory } from '../hooks/useShiftHistory';
+import { buildCompletedShift } from '../services/shiftUtils';
 
 
 // ShiftPage is the referee's overview of all games in the current shift.
@@ -8,17 +10,23 @@ import { useShiftCart } from '../hooks/useShiftCart'
 // Tapping a fixture navigates to GamePage for that specific game.
 function ShiftPage() {
   const navigate = useNavigate()
-  const { cartFixtures, removeFromCart } = useShiftCart();
 
-  // On a fresh shift, FixturesPage sends selectedFixtures via navigation state.
-  // On a cold start (app killed and reopened), navigation state is null —
-  // useShiftFixtures falls back to localStorage to recover the shift.
-
+  // Hooks for shift data and actions
+  const { cartFixtures, removeFromCart, clearCart, shiftDate } = useShiftCart();
+  // Hooks for shift history management
+  const { addShiftToHistory } = useShiftHistory()
 
   // useGameResults reads scores and game status from localStorage.
   // Each fixture may or may not have a result yet — getResult returns null
   // for games that haven't started, so we fall back to safe defaults below.
   const { getResult } = useGameResults()
+
+  const handleEndShift = () => {
+    const completed = buildCompletedShift(cartFixtures, getResult, shiftDate)
+    addShiftToHistory(completed)
+    clearCart()
+    navigate('/history')
+  }
 
   // Navigate to GamePage, passing only the fixtureId in the URL.
   // GamePage looks up fixture details from localStorage — not navigation state —
@@ -44,12 +52,11 @@ function ShiftPage() {
 
           return (
             <li key={fixture.id} className="shift-game-item">
-              <button
-                type="button"
+              <div
                 className="shift-game-button"
                 onClick={() => handleOpenGame(fixture.id)}
               >
-                <span className="shift-game-meta">{fixture.time} · {fixture.location ?? 'Field not set'}</span>
+                <span className="shift-game-meta">{fixture.location ?? 'Field not set'} · {fixture.time} · {fixture.date}</span>
                 <span className="shift-game-teams">{fixture.home} vs {fixture.away}</span>
                 <span className="shift-game-score">{homeScore} – {awayScore}</span>
                 <span className={`shift-game-status status-${statusClass}`}>{status.replace(/_/g, ' ')}</span>
@@ -60,12 +67,23 @@ function ShiftPage() {
                 >
                   Remove
                 </button>
-              </button>
+              </div >
 
             </li>
           )
         })}
       </ul>
+      {cartFixtures.length > 0 && (
+        <div className="shift-actions">
+          <button
+            type="button"
+            className="fixtures-button end-shift"
+            onClick={handleEndShift}
+          >
+            End Shift
+          </button>
+        </div>
+      )}
     </main>
   )
 }
