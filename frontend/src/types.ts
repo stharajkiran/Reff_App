@@ -58,3 +58,26 @@ export interface League {
   id: string;
   name: string;
 }
+
+// Shift builder phase
+export type ActiveShift = {
+  date: string
+  games: ParsedFixture[]  // with live scores
+}
+
+export type CompletedShift = {
+  id: string
+  date: string
+  completedAt: string
+  games: CompletedFixture[]
+  reportSent: boolean
+  reportSentAt: string | null
+}
+
+export type CompletedFixture = ParsedFixture & {
+  homeScore: number
+  awayScore: number
+  status: GameStatus
+  incidents: Incident[]
+}
+

@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useShiftFixtures } from "../hooks/useShiftFixtures";
+import { useShiftCart } from "../hooks/useShiftCart";
 import { useGameResults } from "../hooks/useGameResults";
 import { HALF_DURATION_MINUTES, BREAK_DURATION_SECONDS } from "../config";
 
 function GamePage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { getFixture } = useShiftFixtures(undefined);
+  const { cartFixtures } = useShiftCart();
+  const getFixture = (fixtureId: string) => cartFixtures.find(f => f.id === fixtureId) ?? null;
   const { getResult, updateResult, createDefaultResult } = useGameResults();
 
   // Look up fixture and result data for this game.

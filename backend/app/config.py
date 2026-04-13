@@ -1,19 +1,27 @@
 LEAGUE_URLS = {
-    "coed-over-30-thursday": {
-        "name": "Coed Over 30 Thursday",
-        "url": "https://crescentcitysoccer.com/leagues/coed-over-30-thursday/",
+    "sunday-coed-division-3": {
+        "name": "Sunday Coed Division 3",
+        "url": "https://crescentcitysoccer.com/leagues/coed-division-3-sunday/",
     },
-    "coed-division-2-sunday": {
-        "name": "Coed Division 2 Sunday",
-        "url": "https://crescentcitysoccer.com/leagues/coed-division-2-sunday/",
+    "sunday-coed-division-4": {
+        "name": "Sunday Coed Division 4",
+        "url": "https://crescentcitysoccer.com/leagues/coed-division-4-sunday/",
     },
-    "coed-tuesday": {
-        "name": "Coed Tuesday",
+    "tuesday-coed": {
+        "name": "Tuesday Coed",
         "url": "https://crescentcitysoccer.com/leagues/coed-tuesday/",
     },
-    "over-40-friday": {
-        "name": "Over 40 Friday",
+    "thursday-coed-over-30": {
+        "name": "Thursday Coed Over 30",
+        "url": "https://crescentcitysoccer.com/leagues/coed-over-30-thursday/",
+    },
+    "friday-over-40": {
+        "name": "Friday Over 40",
         "url": "https://crescentcitysoccer.com/leagues/over-40-friday/",
+    },
+    "saturday-division-3": {
+        "name": "Saturday Division 3",
+        "url": "https://crescentcitysoccer.com/leagues/division-3-saturday/",
     },
 }
 

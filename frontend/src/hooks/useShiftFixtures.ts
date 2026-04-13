@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import type { ParsedFixture } from '../types'
-
-const STORAGE_KEY = 'shiftFixtures'
+import { STORAGE_KEY } from '../config'
 
 function loadFromStorage(): ParsedFixture[] {
   try {

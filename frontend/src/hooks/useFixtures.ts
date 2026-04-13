@@ -48,7 +48,7 @@ export const useFixtures = () => {
   // We return the state AND the manual function
   return {
     leagues,
-    fixtures,
+    apiFixtures: fixtures,
     loadingLeagues,
     loadingFixtures,
     error,

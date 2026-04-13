@@ -681,3 +681,19 @@ body {
   }
 }
 
+
+
+.fixture-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px;
+  margin-bottom: 0.2rem;
+  background-color: #ffffff;
+  border-radius: 2px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.1s ease, border-color 0.2s ease;
+}
+
+
