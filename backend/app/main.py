@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers import fixtures
+from app.routers import report
 
 app = FastAPI()
 
@@ -23,6 +24,7 @@ app.add_middleware(
 # --- 2. Include Routers ---
 # We prefix the routes so your frontend calls /api/fixtures
 app.include_router(fixtures.router, prefix="/api")
+app.include_router(report.router, prefix="/api")
 
 @app.get("/")
 def read_root():

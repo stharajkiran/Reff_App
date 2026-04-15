@@ -5,7 +5,7 @@ import re
 
 async def fetch_fixture_lines(url: str) -> list[str]:
     """Fetches the fixture lines from the given URL."""
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=30.0) as client:
         response = await client.get(url)
         # Ensure we handle potential request errors
         response.raise_for_status()

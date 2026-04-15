@@ -8,6 +8,7 @@ import Header from './components/Header'
 import ShiftBuilderPage from './pages/ShiftBuilderPage'
 import HistoryPage from './pages/HistoryPage'
 import { ShiftCartProvider } from './context/ShiftCartContext'
+import SettingsPage from './pages/SettingsPage'
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
           <Route path="/game/:id" element={<GamePage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/fixtures" element={<FixturesPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+
         </Routes>
       </ShiftCartProvider>
     </BrowserRouter>

@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useShiftCart } from '../context/ShiftCartContext'
 import { useGameResults } from "../hooks/useGameResults";
-import { HALF_DURATION_MINUTES, BREAK_DURATION_SECONDS } from "../config";
+import { IncidentSection } from "../components/IncidentSection";
+import  {useGameTimer} from "../hooks/useGameTimer";
 
 function GamePage() {
   const { id } = useParams<{ id: string }>();
@@ -16,33 +17,8 @@ function GamePage() {
   const result = id ? getResult(id) : null;
   const status = result?.status ?? "not_started";
 
+  const { timerDisplay, isPastLimit } = useGameTimer(result, status, id ?? '', updateResult)
 
-  // time
-  const [now, setNow] = useState(Date.now());
-
-  const alertSound = new Audio("/alert.mp3");
-
-  const isActive = ["first_half", "half_time", "second_half"].includes(status);
-  // Determine which start time to use based on status
-  const startedAt = status === "first_half" ? result?.firstHalfStartedAt
-    : status === "second_half" ? result?.secondHalfStartedAt
-      : status === "half_time" ? result?.halfTimeStartedAt
-        : null;
-
-  // Time limit is based on the current phase's duration setting.
-  // Fallbacks match config defaults in case result hasn't initialized yet.
-  const limitSeconds = status === "half_time"
-    ? (result?.breakDurationSeconds ?? BREAK_DURATION_SECONDS)
-    : (result?.halfDurationMinutes ?? HALF_DURATION_MINUTES) * 60
-
-  // 2. Calculate elapsed seconds based on the active period.
-  const elapsedSeconds = startedAt ? Math.floor((now - startedAt) / 1000) : 0;
-  // Visual indicator: are we past the expected duration?
-  const isPastLimit = elapsedSeconds > limitSeconds;
-
-  const mins = Math.floor(elapsedSeconds / 60);
-  const secs = elapsedSeconds % 60;
-  const timerDisplay = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 
   // Guard: redirect to shift if id is missing or fixture doesn't exist.
   useEffect(() => {
@@ -57,35 +33,6 @@ function GamePage() {
       updateResult(id, createDefaultResult(id));
     }
   }, []);
-
-  // Timer: ticks every second during first_half, auto-transitions when time is up.
-  useEffect(() => {
-    // Guard: Make sure result exists and we are in a running state
-    if (!result || !id) return;
-
-    if (isActive && startedAt) {
-      const interval = setInterval(() => {
-        const currentTime = Date.now();
-        setNow(currentTime);
-        // Time in seconds since the current phase started
-        const elapsed = Math.floor((currentTime - startedAt) / 1000)
-        // ONLY auto-transition if we are in a LIVE half
-        if (status === "first_half" || status === "second_half") {
-          if (elapsed >= limitSeconds) {
-            const nextStatus = status === "first_half" ? "half_time" : "final";
-            updateResult(id!, {
-              status: nextStatus,
-              halfTimeStartedAt: status === "first_half" ? currentTime : undefined
-            });
-          }
-        }
-        if (status === "half_time" && elapsed === limitSeconds) {
-          alertSound.play().catch(e => console.log("Audio play blocked", e));
-        }
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [status, result]);
 
   // Return null while the redirect fires — prevents rendering with bad data.
   if (!id || !fixture) return null;
@@ -208,6 +155,24 @@ function GamePage() {
             Reduce score
           </button>
         </div>
+      </section>
+
+      <button onClick={() => navigate("/shift")}>Return to Schedule</button>
+
+      <section className="incident-section-wrapper">
+        <IncidentSection
+          fixtureId={id}
+          homeName={fixture.home}
+          awayName={fixture.away}
+          incidents={result?.incidents ?? []}
+          onAddIncident={(incident) => {
+            updateResult(id, { incidents: [...(result?.incidents ?? []), incident] });
+          }}
+          onRemoveIncident={(incidentId) => {
+            const updatedIncidents = (result?.incidents ?? []).filter(i => i.id !== incidentId);
+            updateResult(id, { incidents: updatedIncidents });
+          }}
+        />
       </section>
     </main>
   );

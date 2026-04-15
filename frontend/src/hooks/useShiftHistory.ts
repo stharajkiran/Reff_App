@@ -22,13 +22,16 @@ export function useShiftHistory() {
   // shiftHistory is an object keyed by shift ID for easy lookup and update.
   const [shiftHistory, setShiftHistory] = useState(loadFromStorage);
 
+  // history is the array version, sorted by date, for rendering in the UI.
+  // Sortting is done to keep most recently completed shifts at the top. This is a pure function of shiftHistory, so we memoize it.
   const history = useMemo(
     () =>
       Object.values(shiftHistory).sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+        (a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime(),
       ),
     [shiftHistory],
   );
+
   function addShiftToHistory(shift: CompletedShift): void {
     setShiftHistory((prev) => {
       const next = { ...prev, [shift.id]: shift };

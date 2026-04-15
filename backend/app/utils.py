@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from app.config import LEAGUE_FIELDS
 
 def get_todays_games(clean_results: dict[str, list[str]]) -> list[str]:
     # Use this instead of print()
@@ -38,3 +39,35 @@ def is_upcoming(date_str, current_limit):
         return dt >= current_limit
     except ValueError:
         return False
+    
+
+def get_smart_year(fixture_month_name: str) -> int:
+    now = datetime.now()
+    current_month = now.month
+    current_year = now.year
+    
+    # Map month names to numbers
+    months = {
+        "january": 1, "february": 2, "march": 3, "april": 4,
+        "may": 5, "june": 6, "july": 7, "august": 8,
+        "september": 9, "october": 10, "november": 11, "december": 12
+    }
+    
+    fixture_month_num = months.get(fixture_month_name.lower(), current_month)
+    
+    # If we are in the second half of the year (Oct-Dec) 
+    # and the game is in the first half (Jan-Mar), it's next year.
+    if current_month > 9 and fixture_month_num < 4:
+        return current_year + 1
+        
+    return current_year
+
+def process_fixture(fix, league_name):
+    # 1. Start with a copy
+    updated_fix = fix.model_copy(update={"leagueName": league_name})
+    
+    # 2. Apply your location logic
+    if not updated_fix.location:
+        updated_fix.location = LEAGUE_FIELDS.get(league_name)
+        
+    return updated_fix

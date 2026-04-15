@@ -11,6 +11,9 @@ export const useFixtures = () => {
   const [loadingFixtures, setLoadingFixtures] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [allFixtures, setAllFixtures] = useState<ParsedFixture[]>([]);
+  const [loadingAll, setLoadingAll] = useState<boolean>(false);
+
   // 2. Write the useEffect for initial league loading...
   // --- AUTOMATIC LOGIC ---
   useEffect(() => {
@@ -43,15 +46,60 @@ export const useFixtures = () => {
     }
   };
 
+  const fetchAllFixtures = async () => {
+    if (leagues.length === 0) return;
+
+    setLoadingAll(true);
+    setError(null);
+    try {
+      const results = await Promise.allSettled(
+        leagues.map((league) => fetchFixtures(league.id)),
+      );
+      // allSettled never throws — handle each result
+      const successful = results
+        .filter((r) => r.status === "fulfilled")
+        .map((r) => (r as PromiseFulfilledResult<ParsedFixture[]>).value);
+
+      setAllFixtures(successful.flat());
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoadingAll(false);
+    }
+  };
+
+  // const fetchAllFixtures = async () => {
+  //   if (leagues.length === 0) return;
+  //   setLoadingAll(true);
+  //   setError(null);
+
+  //   const all: ParsedFixture[] = [];
+  //   for (const league of leagues) {
+  //     try {
+  //       const data = await fetchFixtures(league.id);
+  //       all.push(...data);
+  //     } catch {
+  //       // skip failed leagues silently
+  //     }
+  //     await new Promise((res) => setTimeout(res, 300)); // 300ms between requests
+  //   }
+
+  //   setAllFixtures(all);
+  //   setLoadingAll(false);
+  // };
+
   // 4. Return the pieces the component needs...
   // --- THE CONTROL PANEL ---
   // We return the state AND the manual function
   return {
     leagues,
     apiFixtures: fixtures,
+    allFixtures,
     loadingLeagues,
     loadingFixtures,
+    loadingAll,
     error,
     fetchFixturesForLeague,
+    fetchAllFixtures,
   };
 };

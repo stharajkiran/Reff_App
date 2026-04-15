@@ -24,6 +24,9 @@ function Header() {
                 <NavLink to="/history" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
                     History
                 </NavLink>
+                <NavLink to="/settings" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+                    Settings⚙️
+                </NavLink>
                 <NavLink to="/shift" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
                     🛒 { cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
                 </NavLink>

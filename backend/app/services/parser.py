@@ -1,14 +1,12 @@
 import asyncio
-from calendar import month_name
-from datetime import datetime
 import re
 from pprint import pprint
 from app.services.scraper import fetch_fixture_lines
 
 import re
-from typing import List
-from app.config import KNOWN_FIELDS
+from app.config import KNOWN_FIELDS, LEAGUE_FIELDS, LEAGUE_URLS
 from app.models import ParsedFixture
+from app.utils import get_smart_year
 
 
 # Fetch raw fixture lines from the webpage
@@ -79,7 +77,9 @@ def parse_fixtures(line: str) -> ParsedFixture:
 
     left_side, away_part = sides[0].strip(), sides[1].strip()
 
+    # Default location from config if available
     location = None
+    leagueName = ""
     home = left_side
 
     # 3. Detect Field from Known Values
@@ -104,6 +104,7 @@ def parse_fixtures(line: str) -> ParsedFixture:
         home=home,
         away=away_part,
         location=location,
+        leagueName=leagueName,
         needsFieldReview=(location is None),
     )
 
@@ -124,7 +125,7 @@ def get_individual_games(games_blob: str, normalized_date: str) -> list[ParsedFi
     time_pattern = r"(\d{1,2}:\d{2})"
     parts = re.split(time_pattern, games_blob)
     games = []
-    # Iterate through each game blob, that means each group of games for that day 
+    # Iterate through each game blob, that means each group of games for that day
     for i in range(1, len(parts), 2):
         game_text = f"{parts[i]}{parts[i+1]}".strip()
         # if " v " in game_text.lower() or " vs " in game_text.lower():
@@ -138,28 +139,9 @@ def get_individual_games(games_blob: str, normalized_date: str) -> list[ParsedFi
     return games
 
 
-def get_smart_year(fixture_month_name: str) -> int:
-    now = datetime.now()
-    current_month = now.month
-    current_year = now.year
-    
-    # Map month names to numbers
-    months = {
-        "january": 1, "february": 2, "march": 3, "april": 4,
-        "may": 5, "june": 6, "july": 7, "august": 8,
-        "september": 9, "october": 10, "november": 11, "december": 12
-    }
-    
-    fixture_month_num = months.get(fixture_month_name.lower(), current_month)
-    
-    # If we are in the second half of the year (Oct-Dec) 
-    # and the game is in the first half (Jan-Mar), it's next year.
-    if current_month > 9 and fixture_month_num < 4:
-        return current_year + 1
-        
-    return current_year
-
-async def get_parsed_fixtures(url: str) -> tuple[dict[str, list[ParsedFixture]], list[ParsedFixture]]:
+async def get_parsed_fixtures(
+    url: str,
+) -> tuple[dict[str, list[ParsedFixture]], list[ParsedFixture]]:
     # url = "https://crescentcitysoccer.com/leagues/coed-over-30-thursday/"
     # url = "https://crescentcitysoccer.com/leagues/coed-division-4-sunday/"
     # url = "https://crescentcitysoccer.com/leagues/division-3-saturday/"
@@ -190,9 +172,11 @@ async def get_parsed_fixtures(url: str) -> tuple[dict[str, list[ParsedFixture]],
 if __name__ == "__main__":
     print("Starting scraper...")
     url = "https://crescentcitysoccer.com/leagues/over-40-friday/"
+    league_name = "Over 40 Friday"
     # Capture the return value here
-    clean_results, clean_results_list = asyncio.run(get_parsed_fixtures(url))
-
+    clean_results, clean_results_list = asyncio.run(
+        get_parsed_fixtures(url, league_name)
+    )
 
     # Now you can use clean_results outside of the async functions
     pprint(clean_results, sort_dicts=False)

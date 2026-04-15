@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useGameResults } from '../hooks/useGameResults'
 import { useShiftCart } from '../context/ShiftCartContext'
 import { useShiftHistory } from '../hooks/useShiftHistory';
-import { buildCompletedShift } from '../services/shiftUtils';
+import { buildCompletedShift } from '../utils/shiftUtils';
 
 
 // ShiftPage is the referee's overview of all games in the current shift.

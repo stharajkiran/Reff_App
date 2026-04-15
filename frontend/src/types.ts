@@ -6,6 +6,7 @@ export type ParsedFixture = {
   home: string
   away: string
   location: string | null
+  leagueName : string
   needsFieldReview: boolean
 }
 
@@ -17,15 +18,7 @@ export type GameStatus =
   | 'second_half'
   | 'final'
 
-// An incident is anything worth reporting: red cards, injuries, disputes.
-export type Incident = {
-  id: string
-  team: 'home' | 'away'
-  type: 'red_card' | 'yellow_card' | 'injury' | 'other'
-  description: string
-}
-
-// GameResult is the durable record for one game across the entire shift.
+  // GameResult is the durable record for one game across the entire shift.
 // Timer design: we store WHEN each phase started (Unix ms timestamp), not
 // how many seconds have elapsed. This way, elapsed time can always be
 // reconstructed as (Date.now() - startedAt), even after an app kill.
@@ -46,10 +39,14 @@ export type GameResult = {
 }
 
 
-// RouteState is what FixturesPage sends via navigate('/shift', { state: ... }).
-// We type it explicitly so TypeScript catches mismatches at the source.
-export type RouteState = {
-  selectedFixtures: ParsedFixture[]
+
+// An incident is anything worth reporting: red cards, injuries, disputes.
+export type Incident = {
+  id: string
+  team: string
+  type: 'red_card' | 'yellow_card' | 'injury' | 'other'
+  description: string
+  name: string
 }
 
 
@@ -81,3 +78,10 @@ export type CompletedFixture = ParsedFixture & {
   incidents: Incident[]
 }
 
+
+
+export type Settings = {
+  recipientEmail: string;
+  senderName: string;
+  ccEmail: string; // optional field
+};

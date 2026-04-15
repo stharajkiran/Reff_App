@@ -7,6 +7,7 @@
 //   needsFieldReview: boolean
 // }
 import { League, ParsedFixture } from "../types";
+import { formatShiftDate } from "../utils/dateUtils";
 
 type FixturesPageViewProps = {
   leagues: League[];
@@ -15,15 +16,16 @@ type FixturesPageViewProps = {
   selectedIds: string[];
   selectedCount: number;
   canContinue: boolean;
+  allHaveLocations: boolean;
   knownFields: string[];
   bulkFieldValue: string;
   loadingFixtures: boolean;
-  error: string | null;
   onLeagueChange: (leagueId: string) => void;
   onToggleFixtureSelection: (fixtureId: string) => void;
   onBulkFieldValueChange: (value: string) => void;
   onBulkFieldApply: () => void;
   onContinue: () => void;
+  groupedFixtures: Record<string, ParsedFixture[]>;
 };
 
 function FixturesPageView({
@@ -33,43 +35,46 @@ function FixturesPageView({
   selectedIds,
   selectedCount,
   canContinue,
+  allHaveLocations,
   knownFields,
   bulkFieldValue,
   loadingFixtures,
-  error,
   onLeagueChange,
   onToggleFixtureSelection,
   onBulkFieldValueChange,
   onBulkFieldApply,
   onContinue,
+  groupedFixtures,
 }: FixturesPageViewProps) {
   return (
     <main className="fixtures-page">
-      <h1>Referee Score Tracker</h1>
-      {/* Create dropdown for leagues */}
-      {/* <label htmlFor="leagueSelect">Select League</label> */}
-      <select
-        id="leagueSelect"
-        aria-label="League Selection" // This satisfies the linter
-        value={selectedLeague}
-        onChange={(e) => onLeagueChange(e.target.value)}
-      >
-        <option value="">Select League</option>
-        {leagues.map((league) => (
-          <option key={league.id} value={league.id}>
-            {league.name}
-          </option>
-        ))}
-      </select>
+      <div className="fixtures-page-header">
+        <h1>Fixtures</h1>
+        <p className="fixtures-subtitle">Select a league to load upcoming games</p>
+      </div>
 
-      {/* Loading fixtures or no fixtures message */}
+      <div className="fixtures-league-row">
+        <label htmlFor="leagueSelect" className="fixtures-label">League</label>
+        <select
+          id="leagueSelect"
+          className="fixtures-select"
+          value={selectedLeague}
+          onChange={(e) => onLeagueChange(e.target.value)}
+        >
+          <option value="">Select League</option>
+          {leagues.map((league) => (
+            <option key={league.id} value={league.id}>
+              {league.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {loadingFixtures ? (
         <p className="fixtures-muted">Loading fixtures...</p>
-      ) : fixtures.length === 0 ? (
-        <p className="fixtures-muted">No fixtures parsed yet.</p>
-      ) : (
-        <h2>Parsed Fixtures</h2>
-      )}
+      ) : fixtures.length === 0 && selectedLeague ? (
+        <p className="fixtures-muted">No upcoming fixtures for this league.</p>
+      ) : null}
 
       <section className="fixtures-card">
         <div className="fixtures-row">
@@ -78,7 +83,6 @@ function FixturesPageView({
             Selected: {selectedCount}/{fixtures.length}
           </span>
         </div>
-
 
 
         {selectedCount > 0 && (
@@ -111,18 +115,17 @@ function FixturesPageView({
           </div>
         )}
 
-        {fixtures.length === 0 ? (
-          <p className="fixtures-muted">No fixtures parsed yet.</p>
-        ) : (
-          <ul className="fixtures-list">
-            {fixtures.map((fixture) => {
-              const isSelected = selectedIds.includes(fixture.id);
 
-              return (
+
+        {Object.entries(groupedFixtures).map(([date, dateFixtures]) => (
+          <div key={date} className="fixture-date-group">
+            <h3 className="date-separator">{formatShiftDate(date)}</h3>
+            <ul className="fixtures-list">
+              {dateFixtures.map(fixture => (
                 <li key={fixture.id}>
                   <button
                     type="button"
-                    className={`fixture-item ${isSelected ? "selected" : ""}`}
+                    className={`fixture-item ${selectedIds.includes(fixture.id) ? "selected" : ""}`}
                     onClick={() => onToggleFixtureSelection(fixture.id)}
                   >
                     <span className="fixture-time">{fixture.time}</span>
@@ -135,28 +138,34 @@ function FixturesPageView({
                       {fixture.location ?? "Field not set"}
                     </span>
                     {fixture.needsFieldReview && (
-                      <span className="fixture-review-tag">Review field</span>
+                      <span className="fixture-review-tag">⚠ Review field</span>
                     )}
                   </button>
                 </li>
-              );
-            })}
-          </ul>
+              ))}
+            </ul>
+          </div>
+        ))}
+
+        {fixtures.length > 0 && (
+          <div className="fixtures-continue-bar">
+            {!allHaveLocations && (
+              <p className="fixtures-muted">All selected games need a field assigned before continuing.</p>
+            )}
+            {!canContinue && (
+              <p className="fixtures-muted">Select at least 1 game to continue.</p>
+            )}
+            <button
+              type="button"
+              className="fixtures-button continue"
+              disabled={!canContinue || !allHaveLocations}
+              onClick={onContinue}
+            >
+              Continue to Shift ({selectedCount} selected)
+            </button>
+          </div>
         )}
 
-        <button
-          type="button"
-          className="fixtures-button continue"
-          disabled={!canContinue}
-          onClick={onContinue}
-        >
-          Continue to Shift
-        </button>
-        {!canContinue && fixtures.length > 0 && (
-          <p className="fixtures-muted">
-            Select at least 1 game to continue.
-          </p>
-        )}
       </section>
     </main>
   );
