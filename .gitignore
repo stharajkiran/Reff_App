@@ -47,3 +47,10 @@ __pycache__/
 rough.ipynb
 z_rough.py
 .claude
+
+
+backend/.env
+frontend/.env
+node_modules/
+__pycache__/
+*.pyc
