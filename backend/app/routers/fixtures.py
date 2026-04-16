@@ -49,7 +49,7 @@ async def get_fixtures(leagueId: str):
             }
         )
         for fix in clean_results_list
-        if is_upcoming(fix.date, now)
+        # if is_upcoming(fix.date, now)
     ]
 
 
