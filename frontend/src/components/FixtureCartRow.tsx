@@ -28,7 +28,7 @@ export function FixtureCartRow({
             <div className="sb-fixture-info">
                 <span className="sb-fixture-time">{fixture.time}</span>
                 <span className="sb-fixture-teams">{fixture.home} vs {fixture.away}</span>
-                <span className="sb-fixture-location">{fixture.location ?? 'Field TBD'}</span>
+                <span className="sb-fixture-location">{fixture.location ?? 'Field TBD'} - {fixture.leagueName}</span>
             </div>
             {!inCart && !hasLocation && (
                 <span className="field-hint">Select a field to enable</span>

@@ -15,12 +15,6 @@ function Header() {
                 <NavLink to="/shift-builder" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
                     Build Shift
                 </NavLink>
-                <NavLink to="/fixtures"  className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
-                    Fixtures
-                </NavLink>
-                {/* <NavLink to="/shift" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
-                    Shift
-                </NavLink> */}
                 <NavLink to="/history" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
                     History
                 </NavLink>

@@ -1,6 +1,5 @@
 import { useState } from "react";
-import type { GameResult } from "../types";
-import { HALF_DURATION_MINUTES, BREAK_DURATION_SECONDS } from "../config";
+import type { GameResult, Settings } from "../types";
 import { storage } from "../storage";
 import type { Incident } from "../types";
 
@@ -26,7 +25,10 @@ function saveToStorage(results: Record<string, GameResult>): void {
 }
 
 // Creates a fresh GameResult for a fixture that is opening for the first time.
-function createDefaultResult(fixtureId: string): GameResult {
+function createDefaultResult(
+  fixtureId: string,
+  settings: Settings,
+): GameResult {
   return {
     fixtureId,
     homeScore: 0,
@@ -35,8 +37,8 @@ function createDefaultResult(fixtureId: string): GameResult {
     firstHalfStartedAt: null,
     halfTimeStartedAt: null,
     secondHalfStartedAt: null,
-    halfDurationMinutes: HALF_DURATION_MINUTES,
-    breakDurationSeconds: BREAK_DURATION_SECONDS,
+    halfDurationMinutes: settings.halfDurationMinutes,
+    breakDurationSeconds: settings.breakDurationSeconds,
     incidents: [],
   };
 }
@@ -83,5 +85,12 @@ export function useGameResults() {
     });
   }
 
-  return { results, getResult, updateResult, createDefaultResult, addIncident, removeIncident };
+  return {
+    results,
+    getResult,
+    updateResult,
+    createDefaultResult,
+    addIncident,
+    removeIncident,
+  };
 }

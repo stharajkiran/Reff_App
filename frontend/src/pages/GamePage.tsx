@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useShiftCart } from '../context/ShiftCartContext'
 import { useGameResults } from "../hooks/useGameResults";
 import { IncidentSection } from "../components/IncidentSection";
-import  {useGameTimer} from "../hooks/useGameTimer";
+import { useGameTimer } from "../hooks/useGameTimer";
+import { useSettings } from "../hooks/useSettings";
 
 function GamePage() {
   const { id } = useParams<{ id: string }>();
@@ -11,6 +12,11 @@ function GamePage() {
   const { cartFixtures } = useShiftCart();
   const getFixture = (fixtureId: string) => cartFixtures.find(f => f.id === fixtureId) ?? null;
   const { getResult, updateResult, createDefaultResult } = useGameResults();
+
+  const [showTimer, setShowTimer] = useState(false);
+
+
+  const { settings } = useSettings();
 
   // Look up fixture and result data for this game.
   const fixture = id ? getFixture(id) : null;
@@ -30,7 +36,7 @@ function GamePage() {
   // Initialize result once on mount — must be before early return (Rules of Hooks).
   useEffect(() => {
     if (id && fixture && !getResult(id)) {
-      updateResult(id, createDefaultResult(id));
+      updateResult(id, createDefaultResult(id, settings));
     }
   }, []);
 
@@ -110,6 +116,16 @@ function GamePage() {
             </div>
           </div>
         )}
+
+
+
+         {(status!="final" && status!="not_started") && <button
+          className={`incident-toggle-btn cancel`}
+          onClick={() => updateResult(id, { status: "not_started" })}
+        >
+          Reset Timer
+        </button>}
+
 
         {/* 3. THE FINAL STATE */}
         {status === "final" && (

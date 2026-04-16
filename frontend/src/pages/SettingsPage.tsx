@@ -19,7 +19,7 @@ function SettingsPage() {
         const { name, value } = e.target;
         setLocalSettings(prev => ({
             ...prev,
-            [name]: value // This dynamically targets 'recipientEmail', 'senderName', etc.
+            [name]: name === "halfDurationMinutes" || name === "breakDurationSeconds" ? Number(value) : value
         }));
     };
 
@@ -65,6 +65,27 @@ function SettingsPage() {
                         onChange={handleChange}
                     />
                 </label>
+
+                <label>
+                    Half Duration (minutes):
+                    <input
+                        type="number"
+                        name="halfDurationMinutes"
+                        value={localSettings.halfDurationMinutes}
+                        onChange={handleChange}
+                    />
+                </label>
+                <label>
+                    Break Duration (seconds):
+                    <input
+                        type="number"
+                        name="breakDurationSeconds"
+                        value={localSettings.breakDurationSeconds}
+                        onChange={handleChange}
+                    />
+                </label>
+
+
                 <button onClick={handleSave}>Save</button>
                 {saveStatus === 'saved' && <p className="success">Settings saved successfully!</p>}
                 {saveStatus === 'error' && <p className="error">Please enter a valid email address.</p>}

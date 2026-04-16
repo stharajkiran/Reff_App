@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { GameResult, GameStatus } from "../types";
-import { HALF_DURATION_MINUTES, BREAK_DURATION_SECONDS } from "../config";
+import { useSettings } from "./useSettings";
 
 export function useGameTimer(
   result: GameResult | null,
@@ -11,8 +11,8 @@ export function useGameTimer(
   // time
   const [now, setNow] = useState(Date.now());
 
-  const alertSound = useRef(new Audio("/alert.mp3"));
-
+  const { settings } = useSettings();
+  const alertSound = new Audio("/alert.mp3");
   const isActive = ["first_half", "half_time", "second_half"].includes(status);
   // Determine which start time to use based on status
   const startedAt =
@@ -28,8 +28,8 @@ export function useGameTimer(
   // Fallbacks match config defaults in case result hasn't initialized yet.
   const limitSeconds =
     status === "half_time"
-      ? (result?.breakDurationSeconds ?? BREAK_DURATION_SECONDS)
-      : (result?.halfDurationMinutes ?? HALF_DURATION_MINUTES) * 60;
+      ? (result?.breakDurationSeconds ?? settings.breakDurationSeconds)
+      : (result?.halfDurationMinutes ?? settings.halfDurationMinutes) * 60;
 
   // 2. Calculate elapsed seconds based on the active period.
   const elapsedSeconds = startedAt ? Math.floor((now - startedAt) / 1000) : 0;
@@ -63,9 +63,7 @@ export function useGameTimer(
           }
         }
         if (status === "half_time" && elapsed === limitSeconds) {
-          alertSound.current
-            .play()
-            .catch((e) => console.log("Audio play blocked", e));
+          alertSound.play().catch((e) => console.log("Audio play blocked", e));
         }
       }, 1000);
       return () => clearInterval(interval);

@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import FixturesPage from './pages/FixturesPage'
 import ShiftPage from './pages/ShiftPage'
 import GamePage from './pages/GamePage'
 
@@ -21,7 +20,6 @@ function App() {
           <Route path="/shift" element={<ShiftPage />} />
           <Route path="/game/:id" element={<GamePage />} />
           <Route path="/history" element={<HistoryPage />} />
-          <Route path="/fixtures" element={<FixturesPage />} />
           <Route path="/settings" element={<SettingsPage />} />
 
         </Routes>

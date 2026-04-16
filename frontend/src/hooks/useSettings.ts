@@ -17,9 +17,9 @@ export function useSettings() {
       const raw = storage.get(STORAGE_KEY);
       return raw
         ? (JSON.parse(raw) as Settings)
-        : { recipientEmail: "", senderName: "Referee", ccEmail: "" };
+        : { recipientEmail: "", senderName: "Referee", ccEmail: "", halfDurationMinutes: 45, breakDurationSeconds: 900 };
     } catch {
-      return { recipientEmail: "", senderName: "Referee", ccEmail: "" };
+      return { recipientEmail: "", senderName: "Referee", ccEmail: "", halfDurationMinutes: 45, breakDurationSeconds: 900 };
     }
   });
 
@@ -33,3 +33,5 @@ export function useSettings() {
 
   return { settings, updateSettings };
 }
+
+
