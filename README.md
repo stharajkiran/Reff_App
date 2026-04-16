@@ -22,7 +22,7 @@
 - **Incident logging** — log yellow cards, red cards, and injuries per team with player name and description
 - **Shift history** — browse all completed games with full incident records
 - **Email shift report** — send a formatted report either through SendGrid (backend API) or your device Mail app
-- **PWA-ready** — installable on Android, works offline for in-progress games via localStorage
+- **PWA-ready (manual install)** — can be installed from Chrome on Android using Add to Home Screen, and works offline for in-progress games via localStorage
 
 ---
 
@@ -93,6 +93,17 @@ By default the frontend points to `http://localhost:8000` as the API base. For p
 ```
 VITE_API_BASE_URL=https://your-render-backend.onrender.com
 ```
+
+### 4. Manual PWA Install (Without Plugin)
+
+#### Android
+
+1. Open Chrome and visit the live app URL: `https://reff-app-vrcj.vercel.app/`
+2. Tap the three-dot menu in Chrome
+3. Tap **Add to Home screen**
+4. Confirm the install prompt
+
+After install, the app opens from your home screen with the app name and icon, behaving like a native app window.
 
 ---
 
