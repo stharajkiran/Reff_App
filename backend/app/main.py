@@ -8,10 +8,14 @@ app = FastAPI()
 
 # --- 1. CORS Configuration ---
 # This allows your React (Vite) dev server to make requests to FastAPI
-
+origins=[
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "https://reff-app-vrcj.vercel.app",
+    ]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=origins,
     allow_credentials=False,
     allow_methods=["*"],  # Allows GET, POST, etc.
     allow_headers=["*"],  # Allows all headers
