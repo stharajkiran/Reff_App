@@ -4,7 +4,7 @@ from pprint import pprint
 from app.services.scraper import fetch_fixture_lines
 
 import re
-from app.config import KNOWN_FIELDS, LEAGUE_FIELDS, LEAGUE_URLS
+from app.config import KNOWN_FIELDS
 from app.models import ParsedFixture
 from app.utils import get_smart_year
 
@@ -142,11 +142,7 @@ def get_individual_games(games_blob: str, normalized_date: str) -> list[ParsedFi
 async def get_parsed_fixtures(
     url: str,
 ) -> tuple[dict[str, list[ParsedFixture]], list[ParsedFixture]]:
-    # url = "https://crescentcitysoccer.com/leagues/coed-over-30-thursday/"
-    # url = "https://crescentcitysoccer.com/leagues/coed-division-4-sunday/"
-    # url = "https://crescentcitysoccer.com/leagues/division-3-saturday/"
-    # url = "https://crescentcitysoccer.com/leagues/coed-division-3-sunday/"
-    # url = "https://crescentcitysoccer.com/leagues/over-40-friday/"
+
 
     # 1. Fetch the raw fixture lines from the webpage
     results = await fetch_fixture_lines(url)
@@ -167,16 +163,3 @@ async def get_parsed_fixtures(
             clean_results_list.extend(games)
 
     return clean_results, clean_results_list
-
-
-if __name__ == "__main__":
-    print("Starting scraper...")
-    url = "https://crescentcitysoccer.com/leagues/over-40-friday/"
-    league_name = "Over 40 Friday"
-    # Capture the return value here
-    clean_results, clean_results_list = asyncio.run(
-        get_parsed_fixtures(url, league_name)
-    )
-
-    # Now you can use clean_results outside of the async functions
-    pprint(clean_results, sort_dicts=False)

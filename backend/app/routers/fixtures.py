@@ -52,14 +52,8 @@ async def get_fixtures(leagueId: str):
         if is_upcoming(fix.date, now)
     ]
 
-    # Filter the results to only include upcoming games
-    # upcoming_games = {date: games for date, games in clean_results.items() if is_upcoming(date, now)}
 
     # return the result
     return upcoming_games
 
 
-if __name__ == "__main__":
-    games = asyncio.run(get_fixtures("over-40-friday"))
-    for game in games:
-        print(game)
