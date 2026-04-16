@@ -54,3 +54,5 @@ frontend/.env
 node_modules/
 __pycache__/
 *.pyc
+
+.vscode/
