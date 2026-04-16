@@ -6,6 +6,7 @@ import type {
 } from "../types";
 
 import { Settings } from "../types";
+import { formatShiftDate } from "./dateUtils";
 
 export function buildCompletedShift(
   fixtures: ParsedFixture[],
@@ -91,11 +92,23 @@ export function buildMailtoLink(
   shift: CompletedShift,
   settings: Settings,
 ): string {
-  const subject = encodeURIComponent(`Shift Report — ${shift.date}`);
+  // 1. Format the Date
+  const formatted_date = formatShiftDate(shift.date);
+  // 2. Format the Field Name
+  const firstGame = shift.games[0];
+  const fieldName = firstGame?.location ? ` @ ${firstGame.location}` : "";
+
+  let _subject = `${formatted_date}-${fieldName}`;
+
+  // 3. Format the League Names (using a Set for uniqueness)
+  const leagueNames = Array.from(new Set(shift.games.map((g) => g.leagueName)));
+  if (leagueNames.length > 0) {
+    const leaguesString = leagueNames.map((name) => `(${name})`).join("-");
+    _subject += ` - ${leaguesString}`;
+  }
+
+  const subject = encodeURIComponent(_subject);
   const body = encodeURIComponent(formatShiftReport(shift));
   const cc = settings.ccEmail ? `&cc=${settings.ccEmail}` : "";
   return `mailto:${settings.recipientEmail}?subject=${subject}${cc}&body=${body}`;
 }
-
-
-

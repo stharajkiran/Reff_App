@@ -7,6 +7,7 @@ from sendgrid.helpers.mail import Cc
 
 from datetime import datetime
 
+
 def format_shift_report(completed_shift: CompletedShift) -> str:
     report = ""
 
@@ -47,18 +48,20 @@ def send_shift_report(completed_shift: CompletedShift) -> bool:
         # Format the date for the email subject
         dt_object = datetime.strptime(completed_shift.date.title(), "%Y-%B-%d")
         formatted_date = dt_object.strftime("%A-%B-%d-%Y")
-       
+
         # fromat the field name
-        field = f"@ {completed_shift.games[0].location}" if completed_shift.games else ""
+        field = (
+            f"@ {completed_shift.games[0].location}" if completed_shift.games else ""
+        )
         subject = f"{formatted_date}-{field}"
 
-        # format the league names        
+        # format the league names
         league_names = set(game.leagueName for game in completed_shift.games)
         if league_names:
             # (league 1)-(league 2) format if multiple leagues, otherwise just league name
             for league_name in league_names:
                 subject += f" ({league_name})"
-        
+
         # format the email body
         body = format_shift_report(completed_shift)
 
