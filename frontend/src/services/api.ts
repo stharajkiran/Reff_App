@@ -33,3 +33,5 @@ export async function sendReport(shift: CompletedShift): Promise<{ success: bool
 
   return response.json() as Promise<{ success: boolean }>;
 }
+
+

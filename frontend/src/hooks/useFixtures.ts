@@ -68,26 +68,6 @@ export const useFixtures = () => {
     }
   };
 
-  // const fetchAllFixtures = async () => {
-  //   if (leagues.length === 0) return;
-  //   setLoadingAll(true);
-  //   setError(null);
-
-  //   const all: ParsedFixture[] = [];
-  //   for (const league of leagues) {
-  //     try {
-  //       const data = await fetchFixtures(league.id);
-  //       all.push(...data);
-  //     } catch {
-  //       // skip failed leagues silently
-  //     }
-  //     await new Promise((res) => setTimeout(res, 300)); // 300ms between requests
-  //   }
-
-  //   setAllFixtures(all);
-  //   setLoadingAll(false);
-  // };
-
   // 4. Return the pieces the component needs...
   // --- THE CONTROL PANEL ---
   // We return the state AND the manual function

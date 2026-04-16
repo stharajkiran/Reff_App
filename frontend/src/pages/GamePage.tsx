@@ -157,7 +157,7 @@ function GamePage() {
         </div>
       </section>
 
-      <button onClick={() => navigate("/shift")}>Return to Schedule</button>
+      <button className="btn-back" onClick={() => navigate("/shift")}>← Back to Schedule</button>
 
       <section className="incident-section-wrapper">
         <IncidentSection

@@ -96,3 +96,6 @@ export function buildMailtoLink(
   const cc = settings.ccEmail ? `&cc=${settings.ccEmail}` : "";
   return `mailto:${settings.recipientEmail}?subject=${subject}${cc}&body=${body}`;
 }
+
+
+
