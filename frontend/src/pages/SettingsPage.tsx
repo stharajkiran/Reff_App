@@ -19,7 +19,7 @@ function SettingsPage() {
         const { name, value } = e.target;
         setLocalSettings(prev => ({
             ...prev,
-            [name]: name === "halfDurationMinutes" || name === "breakDurationSeconds" ? Number(value) : value
+            [name]: value  // always store as string while editing
         }));
     };
 
@@ -28,10 +28,14 @@ function SettingsPage() {
             setSaveStatus('error')
             return;
         }
-        updateSettings(localSettings)
+        updateSettings({
+            ...localSettings,
+            halfDurationMinutes: Number(localSettings.halfDurationMinutes),
+            breakDurationSeconds: Number(localSettings.breakDurationSeconds),
+        });
         setSaveStatus('saved')
-        setTimeout(() => setSaveStatus('idle'), 3000) // reset after 3 seconds
-    }
+        setTimeout(() => setSaveStatus('idle'), 3000)
+    } 
 
     return (
         <main className="settings-page">

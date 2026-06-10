@@ -30,7 +30,7 @@ def split_by_date(raw_text: str) -> dict[str, str]:
         # Store in a dictionary: { "February 19th": "6:00 Green... 7:00 Green..." }
         daily_schedule[date_header] = games_blob
 
-    return daily_schedule
+    return daily_schedule 
 
 
 # convert the key (date and day) into a consistent format like "february19" for easier lookup later

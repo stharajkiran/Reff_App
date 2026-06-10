@@ -128,8 +128,10 @@ function HistoryPage() {
                           href={buildMailtoLink(shift, settings)}
                           onClick={() => setAwaitingConfirm(shift.id)}
                           className="btn-mailto"
+                          target="_blank"
+                          rel="noreferrer"
                         >
-                          Open in Email App
+                          Open in Gmail
                         </a>
                       )}
 

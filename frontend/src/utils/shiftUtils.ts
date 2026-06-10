@@ -107,8 +107,9 @@ export function buildMailtoLink(
     _subject += ` - ${leaguesString}`;
   }
 
+  const to = encodeURIComponent(settings.recipientEmail);
   const subject = encodeURIComponent(_subject);
   const body = encodeURIComponent(formatShiftReport(shift));
-  const cc = settings.ccEmail ? `&cc=${settings.ccEmail}` : "";
-  return `mailto:${settings.recipientEmail}?subject=${subject}${cc}&body=${body}`;
+  const cc = settings.ccEmail ? `&cc=${encodeURIComponent(settings.ccEmail)}` : "";
+  return `https://mail.google.com/mail/?view=cm&fs=1&to=${to}${cc}&su=${subject}&body=${body}`;
 }
